@@ -1,0 +1,105 @@
+---
+title: "Portfolio Project"
+author: "Jay Gohner"
+date: "October 10, 2019"
+output: html_document
+---
+
+
+INTRODUCTION:
+  I want to see if there are any relations between the levels of education that a certain county in the US has
+  compared to it's rates of violent crimes. I believe that the more educated a population, the more access that
+  population has to higher education, the less likely there is to be incidents of violent crime. Maybe information
+  like this could help to show with hard numbers why we need to take education more seriously in this country.
+  
+  The initial dataset I will start with is from the USDA and it contains census bureau figures from 1970, 1980, 1990 
+  and 2000 as well as the 2013 - 2017 American Community Survey 5 year average.
+  
+  Finding this source was actually more difficult than I had initially assumed, apparently the current administration
+  been quietly removing many datasets. Thankfully the USDA has not been big on complying with these "requests" and
+  I was able to obtain this dataset that I feel gives me a good start in the right direction for my project. The next
+  steps will involve finding reliable sources of violent crime rates by county in these same years. I think another
+  dataset of money spent on higher education and perhaps concentration of schools in areas could also provide me with
+  more insights.
+  
+  The original column names are as follows:
+      State - this contains the state the observation takes place in
+      Area name - this contains the county the observation takes place in
+      Less than a high school diploma, 1970 - number of adults who have less than a high school diploma
+      High school diploma only, 1970 - number of adults who have who have a high school diploma
+      Some college (1-3 years), 1970 - number of adults who have who have some college education
+      Four years of college or higher, 1970 - number of adults who have completed 4 or more years of college
+      Percent of adults with less than a high school diploma, 1970 - percentage of adults
+      Percent of adults with a high school diploma only, 1970 - percentage of adults
+      Percent of adults completing some college (1-3 years), 1970 - percentage of adults
+      Percent of adults completing four years of college or higher, 1970 - percentage of adults
+      These columns are then repeated for 1980, 1990 and 2000
+      Less than a high school diploma, 2013-17 - 
+      High school diploma only, 2013-17 - 
+      Some college or associate's degree, 2013-17 
+      Bachelor's degree or higher, 2013-17 
+      Percent of adults with less than a high school diploma, 2013-17
+      Percent of adults with a high school diploma only, 2013-17
+      Percent of adults completing some college or associate's degree, 2013-17
+      Percent of adults with a bachelor's degree or higher, 2013-17
+  
+  A note on the data: for 1970 and 1980, the share of adults with less than high school includes those who had not
+  completed the 12th grade. In 1990, 2000, and 2013-17 the share includes those who did not receive a high school
+  diploma or its equivalent (such as a GED).
+  
+  I will be renaming the column names in the original dataset and dropping the first column which is some sort of
+  unique key id along with four other unique key ids that are not relevant.
+  
+  
+```{r}
+suppressMessages(library(tidyverse))
+
+eduLevelsbyCounty <- read_csv("Education.csv")
+
+
+
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "State"] <- "state"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Area name"] <- "area_name"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 1970"] <- "lessHSD70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "High school diploma only, 1970"] <- "HSD70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Some college (1-3 years), 1970"] <- "someCollege70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Four years of college or higher, 1970"] <- "4orMoreCollege70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with less than a high school diploma, 1970"] <- "percLessHSD70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 1970"] <- "percHSD70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college (1-3 years), 1970"] <- "percSomeCollege70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing four years of college or higher, 1970"] <- "perc4orMore70"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 1980"] <- "lessHSD80"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "High school diploma only, 1980"] <- "HSD80" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Some college (1-3 years), 1980"] <- "someCollege80" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Four years of college or higher, 1980"] <- "4orMoreCollege80" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with less than a high school diploma, 1980"] <- "percLessHSD80" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 1980"] <- "percHSD80" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college (1-3 years), 1980"] <- "percSomeCollege80" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing four years of college or higher, 1980"] <- "perc4orMore80"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 1990"] <- "lessHSD90"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "High school diploma only, 1990"] <- "HSD90" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Some college or associate's degree, 1990"] <- "someCollege90" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Bachelor's degree or higher, 1990"] <- "4orMoreCollege90" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with less than a high school diploma, 1990"] <- "percLessHSD90" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 1990"] <- "percHSD90" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college or associate's degree, 1990"] <- "percSomeCollege90" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a bachelor's degree or higher, 1990"] <- "perc4orMore90"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 2000"] <- "lessHSD00"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "High school diploma only, 2000"] <- "HSD00" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Some college or associate's degree, 2000"] <- "someCollege00" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Bachelor's degree or higher, 2000"] <- "4orMoreCollege00" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with less than a high school diploma, 2000"] <- "percLessHSD00" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 2000"] <- "percHSD00" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college or associate's degree, 2000"] <- "percSomeCollege00" 
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a bachelor's degree or higher, 2000"] <- "perc4orMore00"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 2013-17"] <- "lessHSD13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "High school diploma only, 2013-17"] <- "HSD13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Some college or associate's degree, 2013-17"] <- "someCollegeorAA13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Bachelor's degree or higher, 2013-17"] <- "bachelorsOrMore13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with less than a high school diploma, 2013-17"] <- "percLessHSD13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 2013-17"] <- "percHSD13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college or associate's degree, 2013-17"] <- "percAA13_17"
+colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a bachelor's degree or higher, 2013-17"] <- "percBA13_17"
+
+  
+```
