@@ -50,14 +50,28 @@ INTRODUCTION:
   I will be renaming the column names in the original dataset and dropping the first column which is some sort of
   unique key id along with four other unique key ids that are not relevant.
   
-  
+  Certain functions and special packages in R can help us organize this data. They are loaded in as libraries. I use the
+  suppressMessages function to make the print out a bit cleaner.
 ```{r}
-suppressMessages(library(tidyverse))
+suppressMessages(library("tidyverse"))
+suppressMessages(library("tidyr"))
+suppressMessages(library("dplyr"))
+suppressMessages(library("readr"))
+suppressMessages(library("stringr"))
+suppressMessages(library("readxl"))
+```
 
+After loading all necessary libraries, we will import the Education.csv dataset using read_csv(). This function reads in a
+csv and makes it into a tibble. A tibble can be thought of as something similar to an excel spreadsheet.
+```{r}
 eduLevelsbyCounty <- read_csv("Education.csv")
+```
 
+This data gives the numbers and percentages for adults 18 and older and the level of education they obtained by county in
+the USA. The column names were long and wordy so I cleaned them up by accessing thw column names and then assigning them
+new ones. I then use the select() function to drop some unique identifier columns that serve no purpose to this project.
 
-
+```{r}
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "State"] <- "state"
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Area name"] <- "area_name"
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 1970"] <- "lessHSD70"
@@ -101,5 +115,18 @@ colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults wi
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college or associate's degree, 2013-17"] <- "percAA13_17"
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a bachelor's degree or higher, 2013-17"] <- "percBA13_17"
 
-  
+eduLevelsbyCounty <- select(eduLevelsbyCounty, 2, 3, 8:47)
 ```
+
+My goal was to plot the observations for the US as a whole, which is the first entry in the category but I could not quite
+figure that out. I wanted to show what the trends where between the decades for the different levels of education an adult
+over 18 could have obtained.
+```{r}
+#USA <- eduLevelsbyCounty %>%
+  #filter(eduLevelsbyCounty$state == "US") %>%
+  #select(eduLevelsbyCounty, 2, 3, 8:43)
+
+##ggplot(USA, aes(x=USA$state))
+
+```
+I really hope to explore questions of what role the effects of higher education has on a populations rates of violent crime.
