@@ -38,17 +38,9 @@ INTRODUCTION:
       Percent of adults completing some college (1-3 years), 1970 - percentage of adults
       Percent of adults completing four years of college or higher, 1970 - percentage of adults
       These columns are then repeated for 1980, 1990 and 2000
-      Less than a high school diploma, 2013-17 - 
-      High school diploma only, 2013-17 - 
-      Some college or associate's degree, 2013-17 
-      Bachelor's degree or higher, 2013-17 
-      Percent of adults with less than a high school diploma, 2013-17
-      Percent of adults with a high school diploma only, 2013-17
-      Percent of adults completing some college or associate's degree, 2013-17
-      Percent of adults with a bachelor's degree or higher, 2013-17
   
   A note on the data: for 1970 and 1980, the share of adults with less than high school includes those who had not
-  completed the 12th grade. In 1990, 2000, and 2013-17 the share includes those who did not receive a high school
+  completed the 12th grade. In 1990, and 2000 the share includes those who did not receive a high school
   diploma or its equivalent (such as a GED).
   
   I will be renaming the column names in the original dataset and dropping the first column which is some sort of
@@ -110,14 +102,6 @@ colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults wi
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 2000"] <- "% Diploma, 2000" 
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college or associate's degree, 2000"] <- "% AA or more, 2000" 
 colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a bachelor's degree or higher, 2000"] <- "% BA or more, 2000"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Less than a high school diploma, 2013-17"] <- "lessHSD13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "High school diploma only, 2013-17"] <- "HSD13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Some college or associate's degree, 2013-17"] <- "someCollegeorAA13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Bachelor's degree or higher, 2013-17"] <- "bachelorsOrMore13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with less than a high school diploma, 2013-17"] <- "percLessHSD13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a high school diploma only, 2013-17"] <- "percHSD13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults completing some college or associate's degree, 2013-17"] <- "percAA13_17"
-colnames(eduLevelsbyCounty)[colnames(eduLevelsbyCounty) == "Percent of adults with a bachelor's degree or higher, 2013-17"] <- "percBA13_17"
 
 eduLevelsbyCounty <- select(eduLevelsbyCounty, 2, 3, 8:39)
 
