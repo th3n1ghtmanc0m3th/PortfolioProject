@@ -1,0 +1,61 @@
+---
+title: "deliverable2"
+author: "Jay Gohner"
+date: "November 21, 2019"
+output: html_document
+---
+
+Step 1 re-organize data from first table, group, sum and average by state
+
+Step 2 scrape and organize data from https://www.ucrdatatool.gov/Search/Crime/State/RunCrimeStatebyState.cfm
+
+Step 3 make prediction
+
+Step 4 run tests
+
+```{r}
+suppressMessages(library("tidyverse"))
+suppressMessages(library("knitr"))
+purl("EduViolenceInsights.rmd", output = "part1.r") # produces r source from rmd
+source("part1.r") # executes the source
+```
+
+
+
+```{r}
+
+Crime_US <- read_excel("crimeAllStates.xlsx", skip=9)
+colnames(Crime_US)[colnames(Crime_US) == "Revised rape /2"] <- "delete"
+Crime_US <- subset(Crime_US, select = -c(delete))
+colnames(Crime_US)[colnames(Crime_US) == "Legacy rape /1"] <- "Rape"
+colnames(Crime_US)[colnames(Crime_US) == "Violent crime total"] <- "Violent_crime_total"
+colnames(Crime_US)[colnames(Crime_US) == "Murder and nonnegligent Manslaughter"] <- "Murder_and_Manslaughter"
+colnames(Crime_US)[colnames(Crime_US) == "Aggravated assault"] <- "Aggravated_assault"
+
+```
+
+
+
+```{r}
+
+states_vec <- c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "D.C.", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennslyvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming")
+
+state_crime <- list() 
+m <- 1
+n <- 31
+
+for (i in 1:length(states_vec)){
+
+  state_crime[[i]] <- slice(Crime_US, m:n) %>%
+                        mutate(state = states_vec[i])
+  m <- (m + 39)
+  n <- (n + 39) 
+}
+
+names(state_crime) <- states_vec
+
+bind_rows(state_crime)
+
+list2env(state_crime, .GlobalEnv)
+
+```
