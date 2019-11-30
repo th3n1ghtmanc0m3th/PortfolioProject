@@ -5,13 +5,15 @@ date: "November 21, 2019"
 output: html_document
 ---
 
-Step 1 re-organize data from first table, group, sum and average by state
-
 Step 2 scrape and organize data from https://www.ucrdatatool.gov/Search/Crime/State/RunCrimeStatebyState.cfm
 
 Step 3 make prediction
 
 Step 4 run tests
+
+After gathering and cleaning data for adults rates of education from 1970 to 2000, we know focus on gathering data on
+rates of violent crime for those same years. First we will pull in all our data from our previous project to  use for
+this step of the project.
 
 ```{r}
 suppressMessages(library("tidyverse"))
@@ -20,7 +22,16 @@ purl("EduViolenceInsights.rmd", output = "part1.r") # produces r source from rmd
 source("part1.r") # executes the source
 ```
 
-
+I found a large xlsx from https://www.ucrdatatool.gov/Search/Crime/State/RunCrimeStatebyState.cfm
+This dataset contains the population of the state and the number of incidents of violent crime which are classified as:
+Violent Crime Total
+Murder and Manslaughter
+Legacy Rape
+Revised Rape (the empty category)
+Robbery
+Aggravated Assault
+The dataset was actually quite clean for the most part. I needed to remove the Revised rape column as it had been 
+depracated and was no longer in use. I changed up a few of the column names to make them easier to read and work with.
 
 ```{r}
 
@@ -34,7 +45,13 @@ colnames(Crime_US)[colnames(Crime_US) == "Aggravated assault"] <- "Aggravated_as
 
 ```
 
-
+The challenging part was splitting the large dataset up by state so that I could have state based models. I first created
+a vector of States names.
+The next step was to create an empty list which I will then fill in a loop. I know that each tibble for the state will
+be 31 rows long so I set tracking variables m and n to make sure I get exactly the rows I need for each tibble. The for
+loop goes the length of the state names vector and each time it makes a tibble from Crime_US using slice and then mutate
+to add a name column. After the for loop I use the names function to name every element in the list after an element in
+my state names vector. The function list2env then turns a list of tibbles into the global environment.
 
 ```{r}
 
